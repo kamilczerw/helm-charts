@@ -1,6 +1,6 @@
 apiVersion: v2
 name: matrix-telegram-bridge
-description: A Helm chart for Matrix Telegram Bridge
+description: A Helm Chart for Matrix Telegram Bridge
 
 # A chart can be either an 'application' or a 'library' chart.
 #
