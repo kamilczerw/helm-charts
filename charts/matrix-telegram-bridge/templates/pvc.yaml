@@ -1,0 +1,11 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "matrix-telegram-bridge.fullname" . }}-data
+spec:
+  storageClassName: {{ .Values.pvc.data.storageClassName }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.pvc.data.capacity }}

@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "matrix-telegram-bridge.fullname" . }}
+  labels:
+    {{- include "matrix-telegram-bridge.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "matrix-telegram-bridge.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "matrix-telegram-bridge.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "matrix-telegram-bridge.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+
+      initContainers:
+        - name: {{ include "matrix-telegram-bridge.name" . }}-init
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command:
+            - "sh"
+            - "/opt/init-scripts/init.sh"
+          envFrom:
+            {{- include "matrix-telegram-bridge.deployment.envFrom" . | nindent 12 }}
+          env:
+            {{- include "matrix-telegram-bridge.deployment.env" . | nindent 12 }}
+          volumeMounts:
+            {{- include "matrix-telegram-bridge.deployment.volumeMountsInit" . | nindent 12 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            {{- include "matrix-telegram-bridge.deployment.envFrom" . | nindent 12 }}
+          env:
+            {{- include "matrix-telegram-bridge.deployment.env" . | nindent 12 }}
+          volumeMounts:
+            {{- include "matrix-telegram-bridge.deployment.volumeMounts" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 29317
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /_matrix/provision/v1/bridge
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /_matrix/provision/v1/bridge
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: {{ include "matrix-telegram-bridge.fullname" . }}-data
+      - name: init-scripts
+        configMap:
+          name: {{ include "matrix-telegram-bridge.fullname" . }}-scripts
+      - name: config-overrides
+        configMap:
+          name: {{ include "matrix-telegram-bridge.fullname" . }}-config-overrides
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
