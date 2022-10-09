@@ -3,6 +3,16 @@ entries:
   matrix-telegram-bridge:
   - apiVersion: v2
     appVersion: v0.12.1
+    created: "2022-10-09T18:32:10.372405308Z"
+    description: A Helm Chart for Matrix Telegram Bridge
+    digest: 3c79bc26287c9e0f5a8c330cee0de83964683f5b801a44fbb8bfb557429a3e00
+    name: matrix-telegram-bridge
+    type: application
+    urls:
+    - https://github.com/kamilczerw/helm-charts/releases/download/matrix-telegram-bridge-0.1.1/matrix-telegram-bridge-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: v0.12.1
     created: "2022-10-07T19:12:58.974381114Z"
     description: A Helm Chart for Matrix Telegram Bridge
     digest: 994606784362b8f0df127fdb1b19c63cdf3a82886c9d994b07b2ec6a23391d5c
@@ -11,4 +21,4 @@ entries:
     urls:
     - https://github.com/kamilczerw/helm-charts/releases/download/matrix-telegram-bridge-0.1.0/matrix-telegram-bridge-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-07T19:12:58.974385814Z"
+generated: "2022-10-09T18:32:10.372415008Z"
