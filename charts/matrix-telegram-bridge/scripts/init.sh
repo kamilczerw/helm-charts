@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-set -e
 
 if [ ! -f /data/config.yaml ]; then
     echo "Generating /data/config.yaml file"
