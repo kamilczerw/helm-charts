@@ -105,8 +105,8 @@ https://{{- .Values.matrix.homeserver.domain }}
 {{- end -}}
 
 {{- define "matrix-telegram-bridge.matrix.appservice-address" -}}
-{{- if .Values.matrix.appservice.inCluster }}
-{{- include "matrix-telegram-bridge.fullname" . }}.{{- .Release.Namespace -}}.svc.cluster.local:{{- .Values.service.port -}}
+{{- if .Values.matrix.appservice.inCluster -}}
+http://{{- include "matrix-telegram-bridge.fullname" . }}.{{- .Release.Namespace -}}.svc.cluster.local:{{- .Values.service.port -}}
 {{- else -}}
 https://{{- .Values.matrix.appservice.address }}
 {{- end }}
