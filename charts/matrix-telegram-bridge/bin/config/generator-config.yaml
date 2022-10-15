@@ -18,3 +18,5 @@ secrets:
   - "appservice.provisioning.shared_secret"
   - "appservice.as_token"
   - "appservice.hs_token"
+  - "telegram.api_id"
+  - "telegram.api_hash"

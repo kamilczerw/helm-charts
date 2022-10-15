@@ -81,23 +81,8 @@ Name of the secret containing environment variables
       name: {{ .Values.postgresql.password.secretName }}
       key: {{ .Values.postgresql.password.secretKey }}
 - name: MAUTRIX_TELEGRAM_APPSERVICE_DATABASE
-  value: postgres://$(PG_USERNAME):$(PG_PASSWORD)@$(PG_HOST)/$(PG_DATABASE)
+  value: postgres://$(PG_USERNAME):$(PG_PASSWORD)@{{ .Values.postgresql.host }}/{{ .Values.postgresql.databaseName }}
 {{- end }}
-
-{{- define "matrix-telegram-bridge.deployment.volumeMounts" -}}
-- mountPath: /data
-  name: data
-{{- end -}}
-
-{{- define "matrix-telegram-bridge.deployment.volumeMountsInit" -}}
-- name: init-scripts
-  mountPath: "/opt/init-scripts"
-  readOnly: true
-- name: config-overrides
-  mountPath: "/opt/config-overrides"
-  readOnly: true
-{{ include "matrix-telegram-bridge.deployment.volumeMounts" . }}
-{{- end -}}
 
 {{- define "matrix-telegram-bridge.matrix.homeserver-address" -}}
 {{- if .Values.matrix.homeserver.address }}

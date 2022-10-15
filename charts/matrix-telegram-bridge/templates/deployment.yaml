@@ -38,9 +38,13 @@ spec:
             - secretRef:
                 name: {{ include "matrix-telegram-bridge.secretName" . }}
           env:
+            - name: MAUTRIX_DIRECT_STARTUP
+              value: "true"
             {{- include "matrix-telegram-bridge.deployment.env" . | nindent 12 }}
-          # volumeMounts:
-          #   {{- include "matrix-telegram-bridge.deployment.volumeMounts" . | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: "/data"
+              readOnly: true
           ports:
             - name: http
               containerPort: 29317
@@ -55,11 +59,10 @@ spec:
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      
-      # volumes:
-      # - name: data
-      #   persistentVolumeClaim:
-      #     claimName: {{ include "matrix-telegram-bridge.fullname" . }}-data
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "matrix-telegram-bridge.fullname" . }}-config
 
       {{- with .Values.nodeSelector }}
       nodeSelector:
