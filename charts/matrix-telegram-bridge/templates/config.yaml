@@ -1,43 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name:  {{ include "matrix-telegram-bridge.fullname" . }}-config-overrides
+  name:  {{ include "matrix-telegram-bridge.fullname" . }}-config
   labels:
-    app.kubernetes.io/name:  {{ include "matrix-telegram-bridge.fullname" . }}-config-overrides
+    app.kubernetes.io/name:  {{ include "matrix-telegram-bridge.fullname" . }}-config
 data:
-  overrides.yaml: |-
-    bridge:
-      permissions:
-        {{- if not .Values.matrix.bridge.permissions }}
-        '*': relaybot
-        {{ .Values.matrix.homeserver.domain }}: full
-        {{- else }}
-          {{- toYaml .Values.matrix.bridge.permissions | nindent 8 }}
-        {{- end }}
-        {{- if .Values.matrix.bridge.extraPermissions }}
-          {{- toYaml .Values.matrix.bridge.extraPermissions | nindent 8 }}
-        {{- end }}
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name:  {{ include "matrix-telegram-bridge.fullname" . }}-env-vars
-  labels:
-    app.kubernetes.io/name: {{ include "matrix-telegram-bridge.fullname" . }}-env-vars
-data:
-  MAUTRIX_TELEGRAM_HOMESERVER_ADDRESS: "{{- include "matrix-telegram-bridge.matrix.homeserver-address" . -}}"
-  
-  MAUTRIX_TELEGRAM_HOMESERVER_DOMAIN: "{{- .Values.matrix.homeserver.domain -}}"
-  MAUTRIX_TELEGRAM_HOMESERVER_VERIFY_SSL: "{{- .Values.matrix.homeserver.verifySsl -}}"
-  MAUTRIX_TELEGRAM_APPSERVICE_ADDRESS: "{{- include "matrix-telegram-bridge.matrix.appservice-address" . -}}"
-  PG_HOST: "{{- .Values.postgresql.host -}}"
-  PG_DATABASE: "{{- .Values.postgresql.databaseName -}}"
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name:  {{ include "matrix-telegram-bridge.fullname" . }}-scripts
-  labels:
-    app.kubernetes.io/name: {{ include "matrix-telegram-bridge.fullname" . }}-scripts
-data:
-  {{- (.Files.Glob "scripts/*").AsConfig | nindent 2 }}
+  config.yaml: |-
+{{ .Values.config | toYaml | indent 4 }}

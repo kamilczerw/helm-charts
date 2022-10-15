@@ -61,12 +61,15 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "matrix-telegram-bridge.deployment.envFrom" -}}
-{{- $defaultSecretsName := nospace (cat (include "matrix-telegram-bridge.fullname" . ) "-secrets") }}
-- configMapRef:
-    name: {{ include "matrix-telegram-bridge.fullname" . }}-env-vars
-- secretRef:
-    name: {{ default $defaultSecretsName .Values.matrix.secretsName }}
+{{/*
+Name of the secret containing environment variables
+*/}}
+{{- define "matrix-telegram-bridge.secretName" -}}
+{{- if empty .Values.manualSecretName }}
+{{- (include "matrix-telegram-bridge.fullname" .) }}-secret
+{{- else }}
+{{- .Values.manualSecretName }}
+{{- end }}
 {{- end }}
 
 {{- define "matrix-telegram-bridge.deployment.env" -}}
@@ -111,3 +114,4 @@ http://{{- include "matrix-telegram-bridge.fullname" . }}.{{- .Release.Namespace
 https://{{- .Values.matrix.appservice.address }}
 {{- end }}
 {{- end -}}
+
