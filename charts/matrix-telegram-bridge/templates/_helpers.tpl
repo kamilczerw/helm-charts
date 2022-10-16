@@ -99,4 +99,3 @@ http://{{- include "matrix-telegram-bridge.fullname" . }}.{{- .Release.Namespace
 https://{{- .Values.matrix.appservice.address }}
 {{- end }}
 {{- end -}}
-
