@@ -99,3 +99,7 @@ http://{{- include "matrix-telegram-bridge.fullname" . }}.{{- .Release.Namespace
 https://{{- .Values.matrix.appservice.address }}
 {{- end }}
 {{- end -}}
+
+{{- define "matrix-telegram-bridge.init-config-name" -}}
+{{ include "matrix-telegram-bridge.fullname" . }}-init
+{{- end -}}

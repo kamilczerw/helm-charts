@@ -28,6 +28,31 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
 
+      {{- if .Values.postgresql.createDbSchema }}
+      initContainers:
+        - name: database-init
+          image: postgres:alpine3.16
+          command:
+            - "sh"
+            - "/opt/init-scripts/create-db.sh"
+          envFrom:
+            - secretRef:
+                name: {{ include "matrix-telegram-bridge.secretName" . }}
+
+          env:
+            {{- include "matrix-telegram-bridge.deployment.env" . | nindent 12 }}
+            - name: PG_HOST
+              value: {{ .Values.postgresql.host }}
+            - name: PGPASSWORD
+              value: $(PG_PASSWORD)
+
+          volumeMounts:
+            - name: init-script
+              mountPath: "/opt/init-scripts"
+              readOnly: true
+
+      {{- end }}
+
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -66,6 +91,11 @@ spec:
         - name: config
           configMap:
             name: {{ include "matrix-telegram-bridge.fullname" . }}-config
+        {{- if .Values.postgresql.createDbSchema }}
+        - name: init-script
+          configMap:
+            name: {{ include "matrix-telegram-bridge.init-config-name" . }}
+        {{- end }}
         {{- if .Values.extraVolumes }}
         {{- .Values.extraVolumes | toYaml | nindent 8 }}
         {{- end }}

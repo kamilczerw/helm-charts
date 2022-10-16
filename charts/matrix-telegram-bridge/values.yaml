@@ -77,12 +77,15 @@ extraVolumeMounts: []
 # manualSecretName: 
 
 postgresql:
+  createDbSchema: false
   # host: db.matrix.svc.cluster.local
   databaseName: telegram-bridge
   username: synapse
   password:
     secretName: synapse-postgresql
     secretKey: postgresql-password
+
+
 # Configuration of telegram bridge, for the reference please see 
 #    https://github.com/mautrix/telegram/blob/master/mautrix_telegram/example-config.yaml
 config:

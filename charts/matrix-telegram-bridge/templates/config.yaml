@@ -7,3 +7,17 @@ metadata:
 data:
   config.yaml: |-
 {{ .Values.config | toYaml | indent 4 }}
+---
+{{- if .Values.postgresql.createDbSchema }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name:  {{ include "matrix-telegram-bridge.init-config-name" . }}
+  labels:
+    app.kubernetes.io/name:  {{ include "matrix-telegram-bridge.init-config-name" . }}
+data:
+  create-db.sh: |-
+    #!/usr/bin/env sh
+
+    echo "SELECT 'CREATE DATABASE \"{{ .Values.postgresql.databaseName }}\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '{{ .Values.postgresql.databaseName }}')\gexec" | psql -h {{ .Values.postgresql.host | quote }} -U ${PG_USERNAME}
+{{- end }}
