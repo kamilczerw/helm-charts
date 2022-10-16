@@ -70,13 +70,12 @@ nodeSelector: {}
 tolerations: []
 affinity: {}
 
-# If you want to use your own secrets, put the name of the Secret object here
+extraVolumes: []
+extraVolumeMounts: []
+
+# If you want to use your own secrets, put the name of the Secret object to `manualSecretName`
 # manualSecretName: 
 
-pvc:
-  data:
-    storageClassName: openebs-rwx
-    capacity: 10M
 postgresql:
   # host: db.matrix.svc.cluster.local
   databaseName: telegram-bridge

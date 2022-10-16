@@ -45,6 +45,9 @@ spec:
             - name: config
               mountPath: "/data"
               readOnly: true
+            {{- if .Values.extraVolumeMounts }}
+            {{- .Values.extraVolumeMounts | toYaml | nindent 12 }}
+            {{- end }}
           ports:
             - name: http
               containerPort: 29317
@@ -63,6 +66,9 @@ spec:
         - name: config
           configMap:
             name: {{ include "matrix-telegram-bridge.fullname" . }}-config
+        {{- if .Values.extraVolumes }}
+        {{- .Values.extraVolumes | toYaml | nindent 8 }}
+        {{- end }}
 
       {{- with .Values.nodeSelector }}
       nodeSelector:

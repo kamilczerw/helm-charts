@@ -66,7 +66,7 @@ Name of the secret containing environment variables
 */}}
 {{- define "matrix-telegram-bridge.secretName" -}}
 {{- if empty .Values.manualSecretName }}
-{{- (include "matrix-telegram-bridge.fullname" .) }}-secret
+{{- (include "matrix-telegram-bridge.fullname" .) }}-generated
 {{- else }}
 {{- .Values.manualSecretName }}
 {{- end }}
