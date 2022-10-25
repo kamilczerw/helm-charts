@@ -61,12 +61,15 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
-{{- define "matrix-telegram-bridge.deployment.envFrom" -}}
-{{- $defaultSecretsName := nospace (cat (include "matrix-telegram-bridge.fullname" . ) "-secrets") }}
-- configMapRef:
-    name: {{ include "matrix-telegram-bridge.fullname" . }}-env-vars
-- secretRef:
-    name: {{ default $defaultSecretsName .Values.matrix.secretsName }}
+{{/*
+Name of the secret containing environment variables
+*/}}
+{{- define "matrix-telegram-bridge.secretName" -}}
+{{- if empty .Values.manualSecretName }}
+{{- (include "matrix-telegram-bridge.fullname" .) }}-generated
+{{- else }}
+{{- .Values.manualSecretName }}
+{{- end }}
 {{- end }}
 
 {{- define "matrix-telegram-bridge.deployment.env" -}}
@@ -78,23 +81,8 @@ Create the name of the service account to use
       name: {{ .Values.postgresql.password.secretName }}
       key: {{ .Values.postgresql.password.secretKey }}
 - name: MAUTRIX_TELEGRAM_APPSERVICE_DATABASE
-  value: postgres://$(PG_USERNAME):$(PG_PASSWORD)@$(PG_HOST)/$(PG_DATABASE)
+  value: postgres://$(PG_USERNAME):$(PG_PASSWORD)@{{ .Values.postgresql.host }}/{{ .Values.postgresql.databaseName }}
 {{- end }}
-
-{{- define "matrix-telegram-bridge.deployment.volumeMounts" -}}
-- mountPath: /data
-  name: data
-{{- end -}}
-
-{{- define "matrix-telegram-bridge.deployment.volumeMountsInit" -}}
-- name: init-scripts
-  mountPath: "/opt/init-scripts"
-  readOnly: true
-- name: config-overrides
-  mountPath: "/opt/config-overrides"
-  readOnly: true
-{{ include "matrix-telegram-bridge.deployment.volumeMounts" . }}
-{{- end -}}
 
 {{- define "matrix-telegram-bridge.matrix.homeserver-address" -}}
 {{- if .Values.matrix.homeserver.address }}
@@ -110,4 +98,8 @@ http://{{- include "matrix-telegram-bridge.fullname" . }}.{{- .Release.Namespace
 {{- else -}}
 https://{{- .Values.matrix.appservice.address }}
 {{- end }}
+{{- end -}}
+
+{{- define "matrix-telegram-bridge.init-config-name" -}}
+{{ include "matrix-telegram-bridge.fullname" . }}-init
 {{- end -}}

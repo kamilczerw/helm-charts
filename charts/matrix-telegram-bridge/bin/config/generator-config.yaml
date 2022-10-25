@@ -1,0 +1,22 @@
+# This file contains configuration for a script which fetches the config from https://github.com/mautrix/telegram
+# and puts it to a `charts/matrix-telegram-bridge/values.yaml` file
+
+# List of keys which should not have default values
+no_defaults:
+  - "homeserver.address"
+  - "homeserver.domain"
+  - "appservice.address"
+  - "appservice.database"
+  - "appservice.provisioning.shared_secret" # Generate if doesn't exist
+  - "appservice.as_token" # Generate if doesn't exist
+  - "appservice.hs_token" # Generate if doesn't exist
+  - "bridge.permissions"
+  - "telegram.api_id"
+  - "telegram.api_hash"
+
+secrets:
+  - "appservice.provisioning.shared_secret"
+  - "appservice.as_token"
+  - "appservice.hs_token"
+  - "telegram.api_id"
+  - "telegram.api_hash"
