@@ -22,7 +22,27 @@ jobs:
           unzip main.zip
           mkdir -p charts/harness
           cp -r harness-cd-community-main/helm/harness/* charts/harness
-          rm -rf harness-cd-community-main harness-cd-community.zip
+          rm -rf harness-cd-community-main main.zip
+      - name: Check if there are changes
+        id: check
+        run: |
+          if [[ -z $(git status --porcelain charts/harness) ]]; then
+            echo "::set-output name=changes::false"
+          else
+            echo "::set-output name=changes::true"
+          fi
+
+  publish-changes:
+    needs: update-harness
+    if: needs.update-harness.outputs.changes == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Configure Git
+        run: |
+          git config user.name "Repo updater"
+          git config user.email "updater@github.com"
       - name: Commit changes
         run: |
           git add charts/harness
