@@ -1,0 +1,31 @@
+name: Get latest version of harness helm chart
+
+on:
+  schedule:
+    - cron:  '0 10 * * *'
+
+jobs:
+  update-harness:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR"
+      - name: Get latest version of harness helm chart
+        run: |
+          curl -s https://github.com/harness/harness-cd-community/archive/refs/heads/main.zip -o harness-cd-community.zip
+          unzip harness-cd-community.zip
+          mv harness-cd-community-main/helm/harness charts/harness
+          rm -rf harness-cd-community-main harness-cd-community.zip
+      - name: Commit changes
+        run: |
+          git add charts/harness
+          git commit -m "Update harness helm chart to latest version"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
