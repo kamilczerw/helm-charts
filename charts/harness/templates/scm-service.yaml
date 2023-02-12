@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scm
+  annotations:
+    {{- toYaml .Values.service.annotations | nindent 4 }}
+  labels:
+    {{- include "harness.service.labels" . | nindent 4 }}
+spec:
+  ports:
+  - name: scm
+    port: 8091
+  selector:
+    app: scm
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scm
+  annotations:
+    {{- toYaml .Values.deployment.annotations | nindent 4 }}
+  labels:
+    {{- include "harness.deployment.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app: scm
+  template:
+    metadata:
+      annotations:
+        {{- toYaml .Values.replica.annotations | nindent 8 }}
+      labels:
+        app: scm
+        {{- include "harness.replica.labels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "harness.serviceAccountName" . }}
+      containers:
+      - name: scm
+        image: harness/ci-scm-signed:{{ .Values.versions.scm }}
+        securityContext:
+          runAsUser: 65534
+          runAsNonRoot: true
+        ports:
+        - name: scm
+          containerPort: 8091
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command: ["/grpc_health_probe", "-addr=:8091"]
+          initialDelaySeconds: 5
+        livenessProbe:
+          exec:
+            command: ["/grpc_health_probe", "-addr=:8091"]
+          initialDelaySeconds: 10
+        resources:
+          limits:
+            memory: {{ .Values.scm.resources.limits.memory }}
+            cpu: {{ .Values.scm.resources.limits.cpu }}
+          requests:
+            memory: {{ .Values.scm.resources.requests.memory }}
+            cpu: {{ .Values.scm.resources.requests.cpu }}

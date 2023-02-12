@@ -1,0 +1,179 @@
+# See readme for details on setting harness_host
+harness_host: ""
+listen_port: "7143"
+
+# Add custom annotations/labels for deployments
+deployment:
+  annotations:
+    # name: value
+  labels:
+    # name: value
+
+# Add custom annotations/labels for pods/replicas
+replica:
+  annotations:
+    # name: value
+  labels:
+    # name: value
+
+# Add custom annotations/labels for pods/replicas
+service:
+  annotations:
+  # name: value
+  labels:
+  # name: value
+
+# Add custom annotations/labels for service accounts
+serviceAccount:
+  annotations:
+  # name: value
+  labels:
+  # name: value
+
+# Add custom annotations/labels for config maps
+configMap:
+  annotations:
+  # name: value
+  labels:
+  # name: value
+
+# Add custom annotations/labels for secrets
+secret:
+  annotations:
+  # name: value
+  labels:
+  # name: value
+
+# Harness application versions
+versions:
+  busybox: 1.35.0
+  log_service: release-18
+  manager: 77630
+  mongo: 4.2.19
+  ng_auth_ui: 0.45.0
+  ng_ui: 0.331.16
+  nginx: 1.21.4
+  redis: 6.2.7-alpine
+  scm: release-88-ubi
+  platform_service: 77502
+  delegate_proxy: 77629
+  pipeline_service: 1.16.3
+
+# Resource request & limit configuration per application
+ng_ui:
+  resources:
+    limits:
+      memory: 32Mi
+      cpu: 200m
+    requests:
+      memory: 32Mi
+      cpu: 200m
+
+ng_auth_ui:
+  resources:
+    limits:
+      memory: 24Mi
+      cpu: 200m
+    requests:
+      memory: 24Mi
+      cpu: 200m
+
+manager:
+  config:
+    memory: 232
+  resources:
+    limits:
+      memory: 780Mi
+      cpu: 1
+    requests:
+      memory: 512Mi
+      cpu: 200m
+
+ng_manager:
+  config:
+    memory: 232
+  resources:
+    limits:
+      memory: 752Mi
+      cpu: 1
+    requests:
+      memory: 512Mi
+      cpu: 200m
+
+pipeline:
+  config:
+    memory: 200
+  resources:
+    limits:
+      memory: 1000Mi
+      cpu: 1
+    requests:
+      memory: 512Mi
+      cpu: 200m
+
+platform:
+  config:
+    memory: 200
+  resources:
+    limits:
+      memory: 300Mi
+      cpu: 1
+    requests:
+      memory: 300Mi
+      cpu: 200m
+
+log_service:
+  resources:
+    limits:
+      memory: 72Mi
+      cpu: 200m
+    requests:
+      memory: 72Mi
+      cpu: 200m
+
+scm:
+  resources:
+    limits:
+      memory: 100Mi
+      cpu: 200m
+    requests:
+      memory: 100Mi
+      cpu: 200m
+
+delegate_proxy:
+  resources:
+    limits:
+      memory: 24Mi
+      cpu: 200m
+    requests:
+      memory: 24Mi
+      cpu: 200m
+
+proxy:
+  resources:
+    limits:
+      memory: 100Mi
+      cpu: 200m
+    requests:
+      memory: 100Mi
+      cpu: 200m
+
+redis:
+  resources:
+    limits:
+      memory: 128Mi
+      cpu: 200m
+    requests:
+      memory: 128Mi
+      cpu: 200m
+
+mongo:
+  resources:
+    limits:
+      memory: 320Mi
+      cpu: 500m
+    requests:
+      memory: 320Mi
+      cpu: 200m
+      storage: 2Gi
+      wiredTigerCacheSize: 0.125
