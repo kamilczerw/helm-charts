@@ -3,6 +3,8 @@ name: Get latest version of harness helm chart
 on:
   schedule:
     - cron:  '0 10 * * *'
+  workflow_dispatch:
+    
 
 jobs:
   update-harness:
