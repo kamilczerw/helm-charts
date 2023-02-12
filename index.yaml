@@ -1,5 +1,21 @@
 apiVersion: v1
 entries:
+  harness:
+  - apiVersion: v2
+    appVersion: "76324"
+    created: "2023-02-12T19:48:52.291311841Z"
+    description: A Helm chart for Harness Community Edition.
+    digest: 07aed06407e8089859a2146bfa826b94b329d924548bef83813d8f57aaf4ec58
+    home: https://harness.io/
+    name: harness
+    sources:
+    - https://github.com/harness
+    - https://github.com/harness/harness-core
+    - https://github.com/harness/harness-core-ui
+    type: application
+    urls:
+    - https://github.com/kamilczerw/helm-charts/releases/download/harness-0.1.0/harness-0.1.0.tgz
+    version: 0.1.0
   matrix-telegram-bridge:
   - apiVersion: v2
     appVersion: v0.12.1
@@ -31,4 +47,4 @@ entries:
     urls:
     - https://github.com/kamilczerw/helm-charts/releases/download/matrix-telegram-bridge-0.1.0/matrix-telegram-bridge-0.1.0.tgz
     version: 0.1.0
-generated: "2022-10-25T08:31:40.777996737Z"
+generated: "2023-02-12T19:48:52.291320441Z"
