@@ -18,8 +18,8 @@ jobs:
           git config user.email "$GITHUB_ACTOR"
       - name: Get latest version of harness helm chart
         run: |
-          curl -s https://github.com/harness/harness-cd-community/archive/refs/heads/main.zip -o harness-cd-community.zip
-          unzip harness-cd-community.zip
+          curl -sLO https://github.com/harness/harness-cd-community/archive/refs/heads/main.zip
+          unzip main.zip
           mv harness-cd-community-main/helm/harness charts/harness
           rm -rf harness-cd-community-main harness-cd-community.zip
       - name: Commit changes
