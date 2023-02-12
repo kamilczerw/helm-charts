@@ -20,7 +20,8 @@ jobs:
         run: |
           curl -sLO https://github.com/harness/harness-cd-community/archive/refs/heads/main.zip
           unzip main.zip
-          mv harness-cd-community-main/helm/harness charts/harness
+          mkdir -p charts/harness
+          cp -r harness-cd-community-main/helm/harness/* charts/harness
           rm -rf harness-cd-community-main harness-cd-community.zip
       - name: Commit changes
         run: |
@@ -33,8 +34,6 @@ jobs:
           branch: main
 
       - name: Trigger release workflow
-        uses: peter-evans/repository-dispatch@v1
+        uses: peter-evans/repository-dispatch@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          repository: ${{ github.repository }}
           event-type: release
